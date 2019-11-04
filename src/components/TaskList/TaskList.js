@@ -4,15 +4,15 @@ import TaskListItem from '../TaskListItem/TaskListItem';
 
 import './TaskList.css';
 
-const TaskList = ({tasks}) => {  
+const TaskList = ({tasks, onDeleted}) => {  
   return (
   <ul className="list-group task-list">
     {tasks.map((item) => {
       const {id, ...rest} = item;
       return (
-        <li key={id} className="list-group-item"><TaskListItem {...rest}/></li>
+        <li key={id} className="list-group-item"><TaskListItem {...rest} onDeleted={() => onDeleted(id)}/></li>
       );
-  })}    
+  })}
   </ul>
   );
 }

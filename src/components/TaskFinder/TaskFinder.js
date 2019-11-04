@@ -3,7 +3,7 @@ import ItemStatusFilter from '../ItemStatusFilter/ItemStatusFilter'
 
 const TaskFinder = () => {
   return (
-    <input className="search-input" placeholder="search"/>
+    <input className="form-control search-input" placeholder="search"/>
   );
 }
 
