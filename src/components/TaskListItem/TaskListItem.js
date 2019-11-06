@@ -4,7 +4,7 @@ import './TaskListItem.css'
 
 
 class TaskListItem extends Component {
-  state = { done: false, important: false };
+  // state = { done: false, important: false };
 
   // constructor() {
   //   super();
@@ -14,21 +14,6 @@ class TaskListItem extends Component {
   //   }
   // }
 
-  onLabelClick = () => {
-    this.setState(({done}) => {
-        return {
-        done: !done,
-      }
-    })
-  }
-
-  onImportantButtonClick = () => {
-    this.setState(({important}) => {
-        return {
-          important: !important
-        }
-    })
-  }
   // constructor() {
   //   super();
     
@@ -40,8 +25,8 @@ class TaskListItem extends Component {
   // }
   
   render() {
-    const { label, onDeleted } = this.props;
-    const { done, important } = this.state;
+    const { label, done, important, onDeleted, onChangeImportant, onChangeDone } = this.props;
+    // const {  } = this.state;
 
     let classNames = 'task-list-item';
     
@@ -55,9 +40,9 @@ class TaskListItem extends Component {
 
     return (
       <span className={classNames  }>
-        <span className="task-list-item-label" onClick={this.onLabelClick}>{label}</span>
+        <span className="task-list-item-label" onClick={onChangeDone}>{label}</span>
   
-        <button type="button" className="btn btn-outline-success btn-sm float-right" onClick={this.onImportantButtonClick}>
+        <button type="button" className="btn btn-outline-success btn-sm float-right" onClick={onChangeImportant}>
           <i className="fa fa-exclamation" />
         </button>
   

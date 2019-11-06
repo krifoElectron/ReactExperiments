@@ -1,5 +1,4 @@
 import React from 'react';
-import ItemStatusFilter from '../ItemStatusFilter/ItemStatusFilter'
 
 const TaskFinder = () => {
   return (
