@@ -1,10 +1,29 @@
 import React from 'react';
 
-const TaskFinder = () => {
-  return (
-    <input className="form-control search-input" placeholder="search"/>
-  );
-}
+export default class TaskFinder extends React.Component {
+  state = {
+    label: ''
+  };
 
-export default TaskFinder;
- 
+  onLabelChange = (event) => {
+    this.input = event.target;
+    this.setState({label: this.input.value});
+
+    const { searchHandler } = this.props;
+
+    searchHandler(this.input.value);
+  };
+
+  render() {
+    const { label } = this.state;
+
+    return (
+          <input className="form-control search-input"
+                 placeholder="search"
+                 type="text"
+                 onChange={this.onLabelChange}
+                 value={label}
+          />
+    );
+  };
+}

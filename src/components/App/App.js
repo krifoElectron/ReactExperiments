@@ -13,70 +13,107 @@ class App extends Component {
 
   state = {
     taskData: [
-      this.createTaskItem('Drink Coffe'),
+      this.createTaskItem('Drink Coffee'),
       this.createTaskItem('Learn React'),
       this.createTaskItem('Make awesome App'),
       this.createTaskItem('Eat cake')
-    ]
-  }
-  
-  createTaskItem(label) { 
-    return {label, done: false, import: false, id: this.currentId++}
-  }
+    ],
+    searchRow: '',
+    selector: 'All'
+  };
+
+  createTaskItem(label) {
+    return {label, done: false, important: false, id: this.currentId++}
+  };
 
   onDeleted = (id)  => {
     this.setState(({taskData}) => {
       const del_id = taskData.findIndex((elem) => elem.id === id);
       const newTaskData = [...taskData.slice(0, del_id), ...taskData.slice(del_id + 1)]
       return {taskData: newTaskData}
-    }) 
-  }
- 
+    })
+  };
+
   onAdd = (taskText) => {
     this.setState(({taskData}) => {
       const newTaskData = [...taskData, this.createTaskItem(taskText)]
       return {taskData: newTaskData}
-    }) 
-  }
+    })
+  };
 
   propertyToggle(odlList, property, id) {
-    const chage_id = odlList.findIndex((elem) => elem.id === id);
-    const oldItem = odlList[chage_id];
+    const change_id = odlList.findIndex((elem) => elem.id === id);
+    const oldItem = odlList[change_id];
     // changedItem.important = !changedItem.important;
     const changedItem = { ...oldItem, [property]: !oldItem[property]};
-    return [...odlList.slice(0, chage_id), changedItem, ...odlList.slice(chage_id + 1)]
+    return [...odlList.slice(0, change_id), changedItem, ...odlList.slice(change_id + 1)]
   }
 
   onChangeImportant = (id) => {
     this.setState(({taskData}) => {
       return {taskData: this.propertyToggle(taskData, 'important', id)}
     })
-  }
+  };
 
   onChangeDone = (id) => {
     this.setState(({taskData}) => {
       return {taskData: this.propertyToggle(taskData, 'done', id)}
     });
+  };
+
+  searchHandler = (item) => {
+    this.setState({ searchRow: item })
+  };
+
+  statusFilterHandler = (selector) => {
+    this.setState({ selector: selector })
+  };
+
+
+  searchData(taskData, searchRow) {
+    if (searchRow === '') {
+      return taskData;
+    }
+
+    return taskData.filter((value) => {
+      const label = value.label.toLowerCase();
+      return label.includes(searchRow.toLowerCase());
+    });
+  };
+
+  selectData (taskData, selector) {
+    switch (selector) {
+      case 'All':
+        return taskData;
+      case 'Active':
+        return taskData.filter((element) => !element.done);
+      case 'Done':
+        return taskData.filter((element) => element.done);
+      default:
+        return taskData;
+    }
   }
 
   render() {
-    const { taskData } = this.state;
+    const { taskData, searchRow, selector } = this.state;
+    let visibleData = this.searchData(taskData, searchRow);
+    visibleData = this.selectData(visibleData, selector);
 
-    const amount_done = taskData.reduce((prev, curr) => {
+    const amount_done = visibleData.reduce((prev, curr) => {
       if (curr.done) {
         prev += 1;
       }
       return prev
-    }, 0)
+    }, 0);
 
     return (
       <div className='task-app'>
-        <AppHeader more={taskData.length - amount_done} done={amount_done}/>
+        <AppHeader more={visibleData.length - amount_done} done={amount_done}/>
         <div  className="top-panel d-flex">
-          <TaskFinder/>
-          <ItemStatusFilter/>
+          <TaskFinder searchHandler={this.searchHandler}/>
+          <ItemStatusFilter selector={selector} statusFilterHandler={this.statusFilterHandler}/>
         </div>
-        <TaskList tasks={taskData}
+        <TaskList tasks={visibleData}
           onDeleted={this.onDeleted}
           onChangeImportant={this.onChangeImportant}
           onChangeDone={this.onChangeDone} />
@@ -85,26 +122,5 @@ class App extends Component {
     );
   }
 }
-
-// const App = () => {
-
-//   let taskData = [
-//     {label: 'Drink Coffe', id: 1},
-//     {label: 'Learn React', id: 2},
-//     {label: 'Make awesome App', id: 3},
-//     {label: 'Eat cake', id: 4},
-//   ]
-
-//   return (
-//     <div className='task-app'>
-//       <AppHeader more={1} done={3}/>
-//       <div  className="top-panel d-flex">
-//         <TaskFinder/>
-//         <ItemStatusFilter/>
-//       </div>
-//       <TaskList tasks={taskData} onDeleted={ (id) => {console.log(id); ; delete taskData[id - 1];}}/>
-//     </div>
-//   );
-// }
 
 export default App;

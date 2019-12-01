@@ -5,12 +5,12 @@ import './AddForm.css';
 export default class AddForm extends Component {
   state = {
     label: ''
-  }
+  };
 
-  onLabelCange = (event) => {
+  onLabelChange = (event) => {
     this.input = event.target;
     this.setState({label: this.input.value});
-  }
+  };
 
   onSendForm = (event) => {
     event.preventDefault();
@@ -23,7 +23,7 @@ export default class AddForm extends Component {
 
       this.setState({label: ''})
     }
-  }
+  };
 
   render() {
     const { label } = this.state;
@@ -33,7 +33,7 @@ export default class AddForm extends Component {
         <input className="form-control"
                placeholder="чё ещё нужно сделать"
                type="text"
-               onChange={this.onLabelCange}
+               onChange={this.onLabelChange}
                value={label}
         />
         <button
